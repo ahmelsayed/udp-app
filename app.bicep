@@ -8,6 +8,12 @@ resource appEnv 'Microsoft.App/managedEnvironments@2022-11-01-preview' = {
     appLogsConfiguration: {
       destination: 'azure-monitor'
     }
+    workloadProfiles: [
+      {
+        name: 'consumption'
+        workloadProfileType: 'Consumption'
+      }
+    ]
   }
 }
 
@@ -16,6 +22,7 @@ resource shell 'Microsoft.App/containerApps@2022-11-01-preview' = {
   location: location
   properties: {
     environmentId: appEnv.id
+    workloadProfileName: 'consumption'
     configuration: {
       ingress: {
         external: true
@@ -47,6 +54,7 @@ resource udpclient 'Microsoft.App/containerApps@2022-11-01-preview' = {
   location: location
   properties: {
     environmentId: appEnv.id
+    workloadProfileName: 'consumption'
     configuration: {
       ingress: {
         external: true
@@ -58,7 +66,7 @@ resource udpclient 'Microsoft.App/containerApps@2022-11-01-preview' = {
       containers: [
         {
           name: 'udpclient'
-          image: 'docker.io/ahmelsayed/udp-client-rest:latest'
+          image: 'docker.io/ahmelsayed/udp-client:latest'
         }
         {
           name: 'udpserver'
